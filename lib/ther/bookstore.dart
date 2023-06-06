@@ -1,26 +1,16 @@
-import 'package:flutter/foundation.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:project1/components/colors.dart';
-import '../ther/book_detail.dart';
-import '../ther/constants.dart';
-import '../ther/data.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:project1/ther/data.dart';
+import 'package:project1/ther/constants.dart';
+import 'package:project1/ther/book_detail.dart';
 
-class Homepage extends StatefulWidget {
-    Homepage ({super.key});
-
+class Bookstore extends StatefulWidget {
   @override
-  State<Homepage> createState() => _HomepageState();
+  _BookstoreState createState() => _BookstoreState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _BookstoreState extends State<Bookstore> {
 
-
-
-  void signoutuser(){
-    FirebaseAuth.instance.signOut();
-  }
   List<Filter> filters = getFilterList();
   late Filter selectedFilter;
 
@@ -42,11 +32,10 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: textColor,
       appBar: AppBar(
-        backgroundColor: textColor,
+        backgroundColor: Colors.white,
         elevation: 0,
-
+        brightness: Brightness.light,
         leading: Icon(
           Icons.sort,
           color: kPrimaryColor,
@@ -61,17 +50,6 @@ class _HomepageState extends State<Homepage> {
               size: 28,
             ),
           ),
-          GestureDetector(
-            onTap: signoutuser,
-            child: Padding(
-              padding: EdgeInsets.only(right: 16,),
-              child: Icon(
-                Icons.logout,
-                color: Colors.grey[400],
-                size: 28,
-              ),
-            ),
-          ),
         ],
       ),
       body: Column(
@@ -79,10 +57,12 @@ class _HomepageState extends State<Homepage> {
         children: [
 
           Container(
-            padding: EdgeInsets.only(bottom: 16, left: 12, right: 20),
+            padding: EdgeInsets.only(top: 16, left: 16, right: 16),
             decoration: BoxDecoration(
-              color: textColor,
-
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(40),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -92,32 +72,35 @@ class _HomepageState extends State<Homepage> {
                 ),
               ],
             ),
-            child: Center(
-              child: Text(
-                "EBOOKS",
-                style: GoogleFonts.catamaran(
-                  fontWeight: FontWeight.w900,
-                  fontSize: 40,
-                  height: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                
+                Text(
+                  "Discover books",
+                  style: GoogleFonts.catamaran(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 40,
+                    height: 1,
+                  ),
                 ),
-              ),
-            ),
 
-          ),
+                SizedBox(
+                  height: 16,
+                ),
 
+                Padding(
+                  padding: EdgeInsets.only(right: 75),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: buildFilters(),
+                  ),
+                ),
 
-
-
-          Container(
-            height: 100,
-            margin: EdgeInsets.only(top: 18),
-
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-              children: buildAuthors(),
+              ],
             ),
           ),
+
           Expanded(
             child: Container(
               child: ListView(
@@ -128,12 +111,80 @@ class _HomepageState extends State<Homepage> {
             ),
           ),
 
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(40),
+              ),
+            ),
+            child: Column(
+              children: [
+                
+                Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Text(
+                        "Authors to follow",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+
+                      Row(
+                        children: [
+
+                          Text(
+                            "Show all",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: kPrimaryColor,
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: 8,
+                          ),
+
+                          Icon(
+                            Icons.arrow_forward,
+                            size: 18,
+                            color: kPrimaryColor,
+                          ),
+
+                        ],
+                      ),
+
+                    ],
+                  ),
+                ),
+
+                Container(
+                  height: 100,
+                  margin: EdgeInsets.only(bottom: 16),
+                  child: ListView(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    children: buildAuthors(),
+                  ),
+                ),
+
+              ],
+            ),
+          ),
+
         ],
       ),
       bottomNavigationBar: Container(
         height: 70,
         decoration: BoxDecoration(
-          color: textColor,
+          color: Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(25),
             topRight: Radius.circular(25),
@@ -171,7 +222,6 @@ class _HomepageState extends State<Homepage> {
         });
       },
       child: Container(
-
         height: 50,
         child: Stack(
           children: <Widget>[
@@ -181,7 +231,7 @@ class _HomepageState extends State<Homepage> {
               child: Container(
                 width: 30,
                 height: 3,
-                color: selectedFilter == item ? Colors.black : Colors.transparent,
+                color: selectedFilter == item ? kPrimaryColor : Colors.transparent,
               ),
             ),
 
@@ -189,7 +239,7 @@ class _HomepageState extends State<Homepage> {
               child: Text(
                 item.name,
                 style: GoogleFonts.catamaran(
-                  color: selectedFilter == item ? Colors.black : Colors.grey[400],
+                  color: selectedFilter == item ? kPrimaryColor : Colors.grey[400],
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 3,
@@ -283,7 +333,7 @@ class _HomepageState extends State<Homepage> {
   Widget buildAuthor(Author author, int index){
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey,
+        color: Colors.grey[200],
         borderRadius: BorderRadius.all(
           Radius.circular(15),
         ),
@@ -309,7 +359,7 @@ class _HomepageState extends State<Homepage> {
               height: 75,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(author.image),
+                  image: AssetImage(author.image), 
                   fit: BoxFit.cover,
                 ),
               ),
@@ -338,19 +388,19 @@ class _HomepageState extends State<Homepage> {
 
                   Icon(
                     Icons.library_books,
-                    color: Colors.black,
+                    color: Colors.grey,
                     size: 14,
                   ),
 
                   SizedBox(
                     width: 8,
                   ),
-
+                  
                   Text(
                     author.books.toString() + " books",
                     style: TextStyle(
                       fontSize: 14,
-                      color: Colors.black,
+                      color: Colors.grey,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -393,9 +443,5 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<NavigationItem>('selectedItem', selectedItem));
-  }
+
 }
