@@ -1,4 +1,4 @@
-# project1
+# Flutter Ebook
 
 A Ebook App with google and email pass auth 
 
